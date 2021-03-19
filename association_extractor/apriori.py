@@ -37,14 +37,14 @@ def get_candidates_variant(itemset,Lk):
         return [set([i]) for i in itemset]
         
     k_candidates = []
-    #get all the sets of size k possible with Lk   
+    # get all the sets of size k possible with Lk   
     for a in Lk:
         for b in Lk:
             if not set(b).issubset(a):
                 pot_set = set(b).union(a)
                 if not pot_set in k_candidates: 
                     k_candidates+=[pot_set]
-    # cut candidates which have a subset of size k-1 and is not in L_k
+    # cut candidates which have a subset of size k-1 and is not in Lk
     for c in k_candidates:
         if any(j not in Lk for j in [c.difference([i]) for i in c]):
             k_candidates.remove(c)
@@ -55,10 +55,14 @@ def get_supports(transactions_in, candidates,verbose = False):
     """
     get supports given transactions and candidates
     """
+    t_len = len(transactions_in)
+    print_interval = int(len(transactions_in)/10)
     if verbose:
         print('computing supports')
     candidate_supports = {frozenset(c): 0 for c in candidates}
     for idx, t in enumerate(transactions_in):
+        if verbose and (print_interval>10) and (idx % (print_interval)) ==0:
+            print("{} % done".format(100*(idx/t_len)))
        #maybe print progress if apriori has lots of items to process
         for c in candidates:
             if c.issubset(t):
@@ -99,7 +103,8 @@ def apriori(transactions_in, min_support_level,verbose=True):
         #update current supports
         supports.update(candidate_supports)
         
-
+    if verbose:
+        print("resultant itemset of size {}".format(k))
     return return_itemset, supports
 
 
