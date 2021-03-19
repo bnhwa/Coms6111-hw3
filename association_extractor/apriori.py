@@ -31,7 +31,7 @@ def get_candidates_variant(itemset,Lk):
     """
     variant of get candidates based on the Agrawal and Srikant paper in VLDB 1994 
     get all the sets of size k possible with Lk,
-    then prune those which have a subset of size k-1 which is not in L_k
+    then prune those which have a subset of size k-1 which is not in Lk
     """ 
     if Lk == [set()]: # case k = 1
         return [set([i]) for i in itemset]
@@ -103,7 +103,33 @@ def apriori(transactions_in, min_support_level,verbose=True):
     return return_itemset, supports
 
 
-
+def select_rules(itemset_in,supports,min_confidence_level):
+    """
+    select high confidence-rules given
+    input itemset,
+    supports,
+    minimum confidence level
+    
+    returns list of tuples of:
+        (rule_left,rule_right,confidence,support)
+        
+ 
+    """
+    #filter out itemset to only process the ones with more than 1 element
+    itemset_in = set([i for i in itemset_in if len(i)>1])
+    ret_rules = []
+    
+    for i in itemset_in:
+        #get rule splits, then get support and confidence of each
+        for (left,right) in [(i.difference([j]), set([j])) for j in i]:
+            supp = supports[i]
+            conf = supp/supports[left]
+            # add rule if confidence passes thresh
+            if conf >= min_confidence_level:
+                ret_rules+=[(left,right,conf,supp)]
+            
+            pass
+    return ret_rules
 if __name__ == '__main__':
     pass
     #test values using http://www.codeding.com/articles/apriori-algorithm
@@ -127,6 +153,30 @@ if __name__ == '__main__':
     set(["beer"])
         
         ]
+    #class example
+    t_in2 = [
+        set(["pen","ink","diary","soap"]),
+        set(["pen","ink","diary"]),
+        set(["pen","diary"]),
+        set(["pen","ink","soap"]),
+        
+        ]
     # itemset = reduce(lambda x,y: x.union(y), transactions_in)
     # print(itemset)
-    print(apriori(t_in1,0.4))
+    min_support = 0.7
+    min_confidence = 0.8
+    #get itemsets and supports
+    itemset,support = apriori(t_in2,min_support)
+    #extract rules
+    rules = select_rules(itemset,support,min_confidence)
+
+    #print results
+    print("=====Frequent itemsets (min_sup={})=====".format(min_support))
+    for i in itemset:
+        print("{},{}".format(list(i),support[i]))
+    # print(itemset)
+    print("=====High-confidence association rules (min_conf={})=====".format(min_confidence))
+    # print(rules)
+    for left,right,conf,supp in rules:
+        print("{}=>{}(Conf:{},Supp:{})".format(list(left),list(right),conf,supp))
+    
