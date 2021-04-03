@@ -21,4 +21,4 @@ if __name__ == '__main__':
         for row in tqdm(data):
             grouped[row[group_col_idx]].append(row[output_col_idx])
         for row in tqdm( grouped.values() ):
-            out.writerow(row)
+            out.writerow(set(filter(None, row)))
