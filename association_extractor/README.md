@@ -15,7 +15,7 @@ association_extractor/
 	cli.py
 	make_dataset.py
 	example-run.txt
-	INTEGRATED-DATASET (dataset)
+	INTEGRATED-DATASET
 ```
 
 ## Running the Programs
@@ -54,17 +54,19 @@ python3 cli.py INTEGRATED-DATASET <minimum_support> <minimum_confidence>
 
 In this project we selected a dataset from the public datasets that the city of New York provides and extract association rules using the a-priori algorithm.
 
-We choose the NYPD complaint dataset (https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i). To generate data that we can explore with the a-priori algorithm we chose to consider each date as a basket and consider the station name for which the complaint was made as the item. Entries without a station name are discarded.
+We choose the NYPD complaint dataset (https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i). To generate data that we can explore with the a-priori algorithm we chose to consider each date as a basket and consider the (subway) station name for which the complaint was made as the item. Entries without a station name are discarded.
 
-To generate the resulting dataset (INTEGRATED-DATASET) use [python3 make_dataset.py input.csv "CMPLNT_FR_DT" "STATION_NAME" INTEGRATED-DATASET].
+To generate the resulting dataset (INTEGRATED-DATASET) use `python3 make_dataset.py input.csv "CMPLNT_FR_DT" "STATION_NAME" INTEGRATED-DATASET`.
 
 ## Results
 
-We experimented with various cli arguments. [python3 cli.py INTEGRATED-DATASET 0.1 0.5] produced interesting results that we stored in [example-run.txt].
+We experimented with various cli arguments. `python3 cli.py INTEGRATED-DATASET 0.1 0.5` produced interesting results that we stored in `example-run.txt`.
 
 We do see that the algorithm extracts relationships between different subway stations.
 
-Upon examining the correlated stations, we notice that they are usually on the same train line, so that we could attempt to construct a subway map based on this correlation. However, we must also notice that most correlating stations are along the 1/2/3 train. This prompts two possible hypothesis:
-- Subway performers are usually a source of nuisance. It could mean that subway performers are more likely to frequent the 1/2/3 train. This does provide an explanation why we observe complaints for long stretches along the same line.
-- Analogous to subway performers the explanation could also be theft. Some of the correlations we observed are centered around Columbia University. It seems possible that thieves target Columbia students when they ride the subway.
+Upon examining the correlated stations, we notice that they are usually on the same train line, so that we could attempt to construct a subway map based on this correlation. However, we must also notice that most correlating stations are along the 1/2/3 train. This prompts a few possible hypothesis:
+- Subway performers are usually a source of nuisance. It could mean that subway performers are more likely to frequent the 1/2/3 train. This does provide an explanation why we observe complaints for long stretches along the same line on the same date.
+- Analogous to subway performers the explanation could also be theft. Some of the correlations we observed are centered around Columbia University. It seems conceivable that thieves target Columbia students when they ride the subway.
 - The other possibility we considered is that overcrowding could lead to complaints to the NYPD. However, in that case we would have expected to observe similar complaints on other lines (such as the 7 between Grand Central and Court Street)
+
+Of course, further exploration is required too understand the validity of the hypothesis. Nevertheless, the level of support clearly indicates a correlation that is reflected in the real world subway map.
