@@ -1,4 +1,4 @@
-# COMS 6111 HW3 
+# COMS 6111 HW3
 
 **Team:**
 
@@ -15,7 +15,7 @@ association_extractor/
 	cli.py
 	make_dataset.py
 	example-run.txt
-	out.csv (dataset)
+	INTEGRATED-DATASET (dataset)
 ```
 
 ## Running the Programs
@@ -23,13 +23,13 @@ association_extractor/
 To generate the dataset, use:
 
 ```
-python3 make_dataset.py input.csv "CMPLNT_FR_DT" "STATION_NAME" out.csv
+python3 make_dataset.py input.csv "CMPLNT_FR_DT" "STATION_NAME" INTEGRATED-DATASET
 ```
 
 To do the association rule extraction:
 
 ```
-python3 cli.py out.csv <minimum_support> <minimum_confidence>
+python3 cli.py INTEGRATED-DATASET <minimum_support> <minimum_confidence>
 ```
 
 
@@ -50,17 +50,17 @@ python3 cli.py out.csv <minimum_support> <minimum_confidence>
 
 
 
-## Dataset 
+## Dataset
 
 In this project we selected a dataset from the public datasets that the city of New York provides and extract association rules using the a-priori algorithm.
 
 We choose the NYPD complaint dataset (https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i). To generate data that we can explore with the a-priori algorithm we chose to consider each date as a basket and consider the station name for which the complaint was made as the item. Entries without a station name are discarded.
 
-To generate the resulting dataset (out.csv) use [python3 make_dataset.py input.csv "CMPLNT_FR_DT" "STATION_NAME" out.csv].
+To generate the resulting dataset (INTEGRATED-DATASET) use [python3 make_dataset.py input.csv "CMPLNT_FR_DT" "STATION_NAME" INTEGRATED-DATASET].
 
-## Results 
+## Results
 
-We experimented with various cli arguments. [python3 cli.py out.csv 0.1 0.5] produced interesting results that we stored in [example-run.txt].
+We experimented with various cli arguments. [python3 cli.py INTEGRATED-DATASET 0.1 0.5] produced interesting results that we stored in [example-run.txt].
 
 We do see that the algorithm extracts relationships between different subway stations.
 
